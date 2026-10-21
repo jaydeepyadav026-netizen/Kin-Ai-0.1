@@ -46,17 +46,22 @@ jobs:
             libssl-dev \
             automake
 
-      - name: Install Buildozer
-        run: |
+           - name: Install Buildozer
+              run: |
           python3 -m venv .venv
           .venv/bin/pip install --upgrade pip setuptools wheel
-          .venv/bin/pip install buildozer cython==0.29.33
+          .venv/bin/pip install "Cython==0.29.33" buildozer
+          .venv/bin/cython --version
+          .venv/bin/buildozer --version
 
-      - name: Build Android APK
-        run: |
-          yes | .venv/bin/buildozer -v android debug
+                - name: Build Android APK
+             run: |
+          export PATH="$PWD/.venv/bin:$PATH"
+          yes | buildozer -v android debug
         env:
           P4A_RELEASE: "0"
+
+      
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
